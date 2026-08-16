@@ -1,0 +1,17 @@
+{
+  "base_model": "Qwen/Qwen3.5-4B",
+  "method": "QLoRA SFT",
+  "train_examples": 100000,
+  "eval_examples": 2000,
+  "epochs": 1,
+  "per_device_train_batch_size": 64,
+  "gradient_accumulation_steps": 1,
+  "max_seq_length": 512,
+  "hardware": "AWS g5.2xlarge NVIDIA A10G",
+  "region": "us-east-2",
+  "global_step": 1563,
+  "final_eval_loss": 0.05661,
+  "final_eval_token_accuracy": 0.9771,
+  "dataset_rows_committed": false,
+  "weights_committed": false
+}

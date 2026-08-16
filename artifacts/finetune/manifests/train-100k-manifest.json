@@ -1,0 +1,38 @@
+{
+  "total_examples": 100000,
+  "status": "procedural_synthetic_ready",
+  "provenance": "balanced deterministic prefix selection from six procedural-synthetic source shards",
+  "human_authored_examples": 0,
+  "subset_sha256": "8936be09cec3a47997b49dd44160664c69c9a01e519f5adf10f04cc24f51f144",
+  "shards": [
+    {
+      "source_shard": "first_principles",
+      "examples": 16667
+    },
+    {
+      "source_shard": "game_theory",
+      "examples": 16667
+    },
+    {
+      "source_shard": "pragmatic_systems",
+      "examples": 16667
+    },
+    {
+      "source_shard": "second_order_inversion",
+      "examples": 16667
+    },
+    {
+      "source_shard": "speculative_transhumanism",
+      "examples": 16666
+    },
+    {
+      "source_shard": "systems_thinking",
+      "examples": 16666
+    }
+  ],
+  "evaluation": {
+    "examples": 2000,
+    "sha256": "ddfa0c654993e266fe6910f667c02f8926222b84bc5898a42ee308b5e9092e64",
+    "provenance": "rows immediately after the balanced training prefixes; disjoint from train"
+  }
+}
