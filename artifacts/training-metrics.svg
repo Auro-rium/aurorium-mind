@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="480" viewBox="0 0 900 480" role="img" aria-labelledby="title desc">
+  <title id="title">Aurorium Mind QLoRA training telemetry</title>
+  <desc id="desc">Aggregate loss and token accuracy checkpoints for the 100k-example run.</desc>
+  <rect width="900" height="480" fill="#0b1020"/><text x="54" y="42" fill="#f8fafc" font-family="sans-serif" font-size="22" font-weight="700">Aurorium Mind · QLoRA telemetry</text>
+  <text x="54" y="68" fill="#94a3b8" font-family="sans-serif" font-size="13">Aggregate metrics only · dataset rows and weights excluded</text>
+  <line x1="72" y1="390" x2="850" y2="390" stroke="#475569"/><line x1="72" y1="100" x2="72" y2="390" stroke="#475569"/>
+  <polyline fill="none" stroke="#38bdf8" stroke-width="4" points="110,191 240,248 370,252 500,216 630,263 760,271"/>
+  <polyline fill="none" stroke="#a78bfa" stroke-width="4" points="110,150 240,205 370,229 500,252 630,276 760,286"/>
+  <g fill="#38bdf8"><circle cx="110" cy="191" r="5"/><circle cx="240" cy="248" r="5"/><circle cx="370" cy="252" r="5"/><circle cx="500" cy="216" r="5"/><circle cx="630" cy="263" r="5"/><circle cx="760" cy="271" r="5"/></g>
+  <g fill="#a78bfa"><circle cx="110" cy="150" r="5"/><circle cx="240" cy="205" r="5"/><circle cx="370" cy="229" r="5"/><circle cx="500" cy="252" r="5"/><circle cx="630" cy="276" r="5"/><circle cx="760" cy="286" r="5"/></g>
+  <g fill="#94a3b8" font-family="sans-serif" font-size="12"><text x="98" y="415">500</text><text x="225" y="415">750</text><text x="350" y="415">1000</text><text x="480" y="415">1250</text><text x="604" y="415">1500</text><text x="735" y="415">1563</text><text x="72" y="95">lower is better</text><text x="700" y="455">training step</text></g>
+  <rect x="90" y="103" width="14" height="14" fill="#38bdf8"/><text x="112" y="115" fill="#e2e8f0" font-family="sans-serif" font-size="13">eval loss</text><rect x="190" y="103" width="14" height="14" fill="#a78bfa"/><text x="212" y="115" fill="#e2e8f0" font-family="sans-serif" font-size="13">train loss (scaled view)</text>
+  <text x="625" y="145" fill="#38bdf8" font-family="sans-serif" font-size="13">final eval loss 0.05661</text><text x="625" y="165" fill="#a78bfa" font-family="sans-serif" font-size="13">eval token accuracy 0.9771</text>
+</svg>

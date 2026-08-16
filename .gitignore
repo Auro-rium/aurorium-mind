@@ -1,0 +1,31 @@
+# Training data and generated model weights are intentionally excluded.
+data/*.jsonl
+data/*.jsonl.gz
+data/**/*.jsonl
+data/**/*.jsonl.gz
+full-100k-output/
+smoke-output/
+*-output/
+aborted-runs/
+checkpoints/
+
+# Secrets and local/runtime state
+.env
+**/.env
+serve.env
+**/serve.env
+.vercel/
+.venv/
+**/.venv/
+node_modules/
+**/node_modules/
+.next/
+**/.next/
+__pycache__/
+**/__pycache__/
+*.pyc
+
+# Local editor and design scratch state
+.DS_Store
+.superdesign/tmp/
+code/rust-gateway/target/

@@ -1,0 +1,58 @@
+services:
+  vllm:
+    image: vllm/vllm-openai:latest
+    command: >-
+      ${BASE_MODEL:-Qwen/Qwen3.5-4B}
+      --served-model-name aurorium
+      --enable-lora --lora-modules aurorium=/models/adapter
+      --max-model-len ${MAX_MODEL_LEN:-4096}
+      --gpu-memory-utilization 0.90
+    gpus: all
+    volumes:
+      - ${ADAPTER_DIR:?set ADAPTER_DIR}:/models/adapter:ro
+      - hf-cache:/root/.cache/huggingface
+    environment:
+      - HF_TOKEN
+    restart: unless-stopped
+
+  rust-gateway:
+    build: ../rust-gateway
+    environment:
+      VLLM_URL: http://vllm:8000
+      INTERNAL_GATEWAY_KEY: ${INTERNAL_GATEWAY_KEY:?set a random secret}
+      TELEMETRY_PATH: /telemetry/rust-gateway.jsonl
+    volumes:
+      - telemetry:/telemetry
+    depends_on: [vllm]
+    restart: unless-stopped
+
+  fastapi:
+    build: ../app
+    environment:
+      RUST_GATEWAY_URL: http://rust-gateway:9000
+      INTERNAL_GATEWAY_KEY: ${INTERNAL_GATEWAY_KEY:?set a random secret}
+      CLIENT_API_KEY: ${CLIENT_API_KEY:?set a random secret}
+      TELEMETRY_PATH: /telemetry/fastapi.jsonl
+    volumes:
+      - telemetry:/telemetry
+    depends_on: [rust-gateway]
+    ports: ["127.0.0.1:8000:8000"]
+    restart: unless-stopped
+
+  caddy:
+    image: caddy:2
+    environment:
+      PUBLIC_HOST: ${PUBLIC_HOST:?set the public HTTPS hostname}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    ports: ["443:443"]
+    depends_on: [fastapi]
+    restart: unless-stopped
+
+volumes:
+  hf-cache:
+  telemetry:
+  caddy-data:
+  caddy-config:

@@ -1,0 +1,43 @@
+{
+  "total_examples": 600000,
+  "shards": [
+    {
+      "shard": "pragmatic_systems",
+      "examples": 100000,
+      "sha256": "4f1064982ff6eda4158cda54298933fdc6034e400a71ac097d23c84fa1718f75",
+      "kind": "procedural_synthetic"
+    },
+    {
+      "shard": "first_principles",
+      "examples": 100000,
+      "sha256": "9d79abe885b946232dae10bc57a5c0dea1568a40cd7b03519362f0e9414aab1c",
+      "kind": "procedural_synthetic"
+    },
+    {
+      "shard": "second_order_inversion",
+      "examples": 100000,
+      "sha256": "29d810ae3623b00c2a1534ecc8fc63bc05163da6c98f732ce862f7c94d331cde",
+      "kind": "procedural_synthetic"
+    },
+    {
+      "shard": "systems_thinking",
+      "examples": 100000,
+      "sha256": "0d88fed3e1d5aad4848573f47d6a6c991e5fd534072bf0c098bfeb3c5b7154e7",
+      "kind": "procedural_synthetic"
+    },
+    {
+      "shard": "game_theory",
+      "examples": 100000,
+      "sha256": "48584c1dad916edbadb2c1630ddcc46bb0cc9637a350177ebf14d5e47cca983a",
+      "kind": "procedural_synthetic"
+    },
+    {
+      "shard": "speculative_transhumanism",
+      "examples": 100000,
+      "sha256": "de9cb6f25d9dac1c01c6f20dd25c937e8e20ece48bd295e31f84bc870d258823",
+      "kind": "procedural_synthetic"
+    }
+  ],
+  "human_authored_examples": 0,
+  "status": "procedural_synthetic_ready"
+}
