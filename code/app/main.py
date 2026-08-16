@@ -19,6 +19,12 @@ CLIENT_KEY = os.environ.get("CLIENT_API_KEY", "")
 TELEMETRY = Path(os.environ.get("TELEMETRY_PATH", "/telemetry/fastapi.jsonl"))
 app = FastAPI(title="Aurorium Mind API", version="0.1.0")
 telemetry_lock = asyncio.Lock()
+upstream_client = httpx.AsyncClient(timeout=None)
+
+
+@app.on_event("shutdown")
+async def close_upstream_client() -> None:
+    await upstream_client.aclose()
 
 
 async def emit(event: dict[str, Any]) -> None:
@@ -52,13 +58,11 @@ async def chat(request: Request, authorization: str | None = Header(default=None
     # Only counts are safe telemetry. The actual conversation stays in RAM.
     base_event = {"event": "inference", "request_id": request_id, "message_count": len(messages), "model": payload.get("model", "aurorium")}
     try:
-        client = httpx.AsyncClient(timeout=None)
-        request_obj = client.build_request("POST", f"{RUST_URL}/v1/chat/completions", json=payload, headers={"x-request-id": request_id, "x-internal-key": INTERNAL_KEY})
-        response = await client.send(request_obj, stream=True)
+        request_obj = upstream_client.build_request("POST", f"{RUST_URL}/v1/chat/completions", json=payload, headers={"x-request-id": request_id, "x-internal-key": INTERNAL_KEY})
+        response = await upstream_client.send(request_obj, stream=True)
         if response.status_code >= 400:
             body = await response.aread()
             await response.aclose()
-            await client.aclose()
             raise HTTPException(status_code=response.status_code, detail=body.decode("utf-8", errors="replace"))
 
         async def stream_body():
@@ -72,7 +76,6 @@ async def chat(request: Request, authorization: str | None = Header(default=None
                     yield chunk
             finally:
                 await response.aclose()
-                await client.aclose()
                 await emit({**base_event, "status_code": response.status_code, "stream": True, "first_byte_ms": first_byte_ms, "bytes": bytes_seen, "latency_ms": round((time.perf_counter()-started)*1000, 2)})
 
         return StreamingResponse(stream_body(), status_code=response.status_code, media_type=response.headers.get("content-type", "text/event-stream"))

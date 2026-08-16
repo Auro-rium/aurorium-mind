@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "nodejs";
+export const runtime = "edge";
 
 export async function POST(request: NextRequest) {
   const { message } = await request.json();
@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   const upstream = await fetch(`${process.env.BACKEND_URL}/v1/chat/completions`, {
     method: "POST",
     headers: { "content-type": "application/json", authorization: `Bearer ${process.env.CLIENT_API_KEY}` },
-    body: JSON.stringify({ model: "aurorium", messages: [{ role: "user", content: message }], temperature: 0.7, max_tokens: 256, stream: true, stream_options: { include_usage: true }, chat_template_kwargs: { enable_thinking: false } }),
+    body: JSON.stringify({ model: "aurorium", messages: [{ role: "user", content: message }], temperature: 0.2, max_tokens: 128, stream: true, stream_options: { include_usage: true }, chat_template_kwargs: { enable_thinking: false } }),
   });
   if (!upstream.ok || !upstream.body) {
     const body = await upstream.text();
