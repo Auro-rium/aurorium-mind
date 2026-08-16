@@ -6,7 +6,7 @@ services:
       --served-model-name qwen35-base
       --enable-lora --lora-modules aurorium=/models/adapter
       --max-lora-rank 32
-      --max-model-len ${MAX_MODEL_LEN:-4096}
+      --max-model-len ${MAX_MODEL_LEN:-1024}
       --gpu-memory-utilization 0.90
     gpus: all
     volumes:

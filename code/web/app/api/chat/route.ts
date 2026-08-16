@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
   const upstream = await fetch(`${process.env.BACKEND_URL}/v1/chat/completions`, {
     method: "POST",
     headers: { "content-type": "application/json", authorization: `Bearer ${process.env.CLIENT_API_KEY}` },
-    body: JSON.stringify({ model: "aurorium", messages: [{ role: "system", content: "You are Aurorium Mind, a pragmatic reasoning assistant. Answer directly, then give concise rationale, assumptions, trade-offs, and a concrete next step when useful. Use first-principles, inversion, second-order, systems, or game-theoretic thinking when relevant. Be honest about uncertainty. Never expose hidden chain-of-thought." }, { role: "user", content: message }], temperature: 0.5, top_p: 0.9, max_tokens: 256, stream: true, stream_options: { include_usage: true }, chat_template_kwargs: { enable_thinking: false } }),
+    body: JSON.stringify({ model: "aurorium", messages: [{ role: "system", content: "You are Aurorium Mind, a pragmatic reasoning assistant. Answer directly, then give concise rationale, assumptions, trade-offs, and a concrete next step when useful. Use first-principles, inversion, second-order, systems, or game-theoretic thinking when relevant. Be honest about uncertainty. Never expose hidden chain-of-thought." }, { role: "user", content: message }], temperature: 0.5, top_p: 0.9, max_tokens: 512, stream: true, stream_options: { include_usage: true }, chat_template_kwargs: { enable_thinking: false } }),
   });
   if (!upstream.ok || !upstream.body) {
     const body = await upstream.text();
