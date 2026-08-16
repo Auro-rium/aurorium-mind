@@ -2,8 +2,9 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-type Metrics = { model: string; adapter: string; promptTokens: number; completionTokens: number; totalTokens: number; responseMs: number; tokensPerSecond: number };
-type Message = { id: string; role: "user" | "assistant"; content: string; trace?: string; metrics?: Metrics };
+type Metrics = { model: string; adapter: string; promptTokens: number; completionTokens: number; totalTokens: number; ttftMs?: number; responseMs: number; tokensPerSecond: number };
+type GpuTelemetry = { available?: boolean; gpu?: string; utilizationPct?: number; memoryUsedMiB?: number; memoryTotalMiB?: number; temperatureC?: number; powerW?: number; timestampMs?: number };
+type Message = { id: string; role: "user" | "assistant"; content: string; trace?: string; metrics?: Metrics; gpu?: GpuTelemetry };
 
 function splitTrace(content: string): { answer: string; trace?: string } {
   const match = content.match(/\n(?:Reasoning summary|Trace):\s*([\s\S]*)$/i);
@@ -90,7 +91,9 @@ export default function Page() {
         }
       }
       const parsed = splitTrace(content || "No response returned.");
-      setMessages((current) => current.map((item) => item.id === assistantId ? { ...item, content: parsed.answer, trace: parsed.trace, metrics } : item));
+      let gpu: GpuTelemetry | undefined;
+      try { const gpuResponse = await fetch("/api/telemetry", { cache: "no-store" }); if (gpuResponse.ok) gpu = await gpuResponse.json(); } catch { /* telemetry is best effort */ }
+      setMessages((current) => current.map((item) => item.id === assistantId ? { ...item, content: parsed.answer, trace: parsed.trace, metrics, gpu } : item));
       setNotice("Connected");
     } catch (error) {
       setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: error instanceof Error ? error.message : "Inference endpoint unavailable." }]);
@@ -154,6 +157,11 @@ export default function Page() {
                   <span><b>{message.metrics.totalTokens}</b> total tok</span>
                   <span className="adapter-badge">adapter · {message.metrics.adapter}</span>
                 </div>}
+                {message.metrics && <details className="inference-pipeline"><summary>Inference pipeline · prefill / decode</summary><div className="pipeline-grid">
+                  <span><b>Prefill</b>{message.metrics.promptTokens} tokens · {message.metrics.ttftMs ?? message.metrics.responseMs}ms</span>
+                  <span><b>Decode</b>{message.metrics.completionTokens} tokens · {Math.max(message.metrics.responseMs - (message.metrics.ttftMs ?? 0), 0)}ms · {message.metrics.tokensPerSecond || "—"} tok/s</span>
+                  {message.gpu?.available !== false && message.gpu?.gpu && <span><b>GPU</b>{message.gpu.gpu} · {message.gpu.utilizationPct}% · {message.gpu.memoryUsedMiB}/{message.gpu.memoryTotalMiB} MiB · {message.gpu.temperatureC}°C · {message.gpu.powerW}W</span>}
+                </div></details>}
               </article>)}
               {busy && <article className="message assistant typing"><div className="message-label"><Mark /> Aurorium</div><div className="dots"><i /><i /><i /></div></article>}
             </div>

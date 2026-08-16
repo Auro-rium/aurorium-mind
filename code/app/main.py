@@ -17,6 +17,7 @@ RUST_URL = os.environ.get("RUST_GATEWAY_URL", "http://rust-gateway:9000")
 INTERNAL_KEY = os.environ.get("INTERNAL_GATEWAY_KEY", "")
 CLIENT_KEY = os.environ.get("CLIENT_API_KEY", "")
 TELEMETRY = Path(os.environ.get("TELEMETRY_PATH", "/telemetry/fastapi.jsonl"))
+GPU_TELEMETRY = Path(os.environ.get("GPU_TELEMETRY_PATH", "/host-telemetry/gpu.json"))
 app = FastAPI(title="Aurorium Mind API", version="0.1.0")
 telemetry_lock = asyncio.Lock()
 upstream_client = httpx.AsyncClient(timeout=None)
@@ -44,6 +45,15 @@ def authorize(value: str | None) -> None:
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok", "service": "aurorium-mind-api"}
+
+
+@app.get("/telemetry/gpu")
+async def gpu_telemetry(authorization: str | None = Header(default=None)) -> dict[str, Any]:
+    authorize(authorization)
+    try:
+        return json.loads(GPU_TELEMETRY.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {"available": False, "source": "aws-host-nvidia-smi"}
 
 
 @app.post("/v1/chat/completions")

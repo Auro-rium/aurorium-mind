@@ -34,8 +34,10 @@ services:
       INTERNAL_GATEWAY_KEY: ${INTERNAL_GATEWAY_KEY:?set a random secret}
       CLIENT_API_KEY: ${CLIENT_API_KEY:?set a random secret}
       TELEMETRY_PATH: /telemetry/fastapi.jsonl
+      GPU_TELEMETRY_PATH: /host-telemetry/gpu.json
     volumes:
       - telemetry:/telemetry
+      - /opt/aurorium-mind/telemetry-host:/host-telemetry:ro
     depends_on: [rust-gateway]
     ports: ["127.0.0.1:8000:8000"]
     restart: unless-stopped
