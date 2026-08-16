@@ -2,7 +2,8 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-type Message = { id: string; role: "user" | "assistant"; content: string };
+type Metrics = { model: string; adapter: string; promptTokens: number; completionTokens: number; totalTokens: number; responseMs: number; tokensPerSecond: number };
+type Message = { id: string; role: "user" | "assistant"; content: string; metrics?: Metrics };
 
 const starters = [
   "Map this decision using second-order effects and inversion.",
@@ -57,7 +58,7 @@ export default function Page() {
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.text ?? data.error ?? "Inference failed");
-      setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: data.text ?? "No response returned." }]);
+      setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: data.text ?? "No response returned.", metrics: data.metrics }]);
       setNotice("Connected");
     } catch (error) {
       setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: error instanceof Error ? error.message : "Inference endpoint unavailable." }]);
@@ -112,6 +113,13 @@ export default function Page() {
               {messages.map((message) => <article className={`message ${message.role}`} key={message.id}>
                 <div className="message-label">{message.role === "assistant" ? <><Mark /> Aurorium</> : "You"}</div>
                 <div className="message-content">{message.content}</div>
+                {message.metrics && <div className="run-metrics" aria-label="Inference run metrics">
+                  <span><b>{message.metrics.tokensPerSecond || "—"}</b> tok/s</span>
+                  <span><b>{message.metrics.responseMs}ms</b> response</span>
+                  <span><b>{message.metrics.completionTokens}</b> output tok</span>
+                  <span><b>{message.metrics.promptTokens}</b> input tok</span>
+                  <span className="adapter-badge">adapter · {message.metrics.adapter}</span>
+                </div>}
               </article>)}
               {busy && <article className="message assistant typing"><div className="message-label"><Mark /> Aurorium</div><div className="dots"><i /><i /><i /></div></article>}
             </div>

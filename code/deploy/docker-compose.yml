@@ -3,7 +3,7 @@ services:
     image: vllm/vllm-openai:latest
     command: >-
       ${BASE_MODEL:-Qwen/Qwen3.5-4B}
-      --served-model-name aurorium
+      --served-model-name qwen35-base
       --enable-lora --lora-modules aurorium=/models/adapter
       --max-lora-rank 32
       --max-model-len ${MAX_MODEL_LEN:-4096}
