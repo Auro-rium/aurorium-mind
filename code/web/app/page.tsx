@@ -3,7 +3,12 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 
 type Metrics = { model: string; adapter: string; promptTokens: number; completionTokens: number; totalTokens: number; responseMs: number; tokensPerSecond: number };
-type Message = { id: string; role: "user" | "assistant"; content: string; metrics?: Metrics };
+type Message = { id: string; role: "user" | "assistant"; content: string; trace?: string; metrics?: Metrics };
+
+function splitTrace(content: string): { answer: string; trace?: string } {
+  const match = content.match(/\n(?:Reasoning summary|Trace):\s*([\s\S]*)$/i);
+  return match ? { answer: content.slice(0, match.index).trimEnd(), trace: match[1].trim() } : { answer: content };
+}
 
 const starters = [
   "Map this decision using second-order effects and inversion.",
@@ -79,11 +84,13 @@ export default function Page() {
             if (chunk.aurorium_metrics) metrics = chunk.aurorium_metrics;
             const delta = chunk.choices?.[0]?.delta?.content;
             if (typeof delta === "string") content += delta;
-            setMessages((current) => current.map((item) => item.id === assistantId ? { ...item, content, metrics } : item));
+            const parsed = splitTrace(content);
+            setMessages((current) => current.map((item) => item.id === assistantId ? { ...item, content: parsed.answer, trace: parsed.trace, metrics } : item));
           } catch { /* ignore a partial SSE frame */ }
         }
       }
-      setMessages((current) => current.map((item) => item.id === assistantId ? { ...item, content: content || "No response returned.", metrics } : item));
+      const parsed = splitTrace(content || "No response returned.");
+      setMessages((current) => current.map((item) => item.id === assistantId ? { ...item, content: parsed.answer, trace: parsed.trace, metrics } : item));
       setNotice("Connected");
     } catch (error) {
       setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: error instanceof Error ? error.message : "Inference endpoint unavailable." }]);
@@ -103,7 +110,7 @@ export default function Page() {
           <p className="eyebrow">System state</p>
           <div className="system-card">
             <div><span className="signal" /><span>{notice}</span></div>
-            <small>Qwen 3.5 · QLoRA</small>
+            <small>Qwen/Qwen3.5-4B · aurorium QLoRA</small>
           </div>
         </section>
 
@@ -138,6 +145,7 @@ export default function Page() {
               {messages.map((message) => <article className={`message ${message.role}`} key={message.id}>
                 <div className="message-label">{message.role === "assistant" ? <><Mark /> Aurorium</> : "You"}</div>
                 <div className="message-content">{message.content}</div>
+                {message.trace && <details className="reasoning-trace"><summary>Compact reasoning trace</summary><div>{message.trace}</div></details>}
                 {message.metrics && <div className="run-metrics" aria-label="Inference run metrics">
                   <span><b>{message.metrics.tokensPerSecond || "—"}</b> tok/s</span>
                   <span title="Buffered time to first response; streaming TTFT is not enabled"><b>{message.metrics.responseMs}ms</b> TFT</span>
