@@ -14,6 +14,7 @@ vLLM, a Rust gateway, FastAPI, and Caddy, with a Next.js/Vercel workspace UI.
 See [`artifacts/training-summary.md`](artifacts/training-summary.md) for the
 run configuration, aggregate metrics, checksums, and deployment boundary. The
 SVG graph is [`artifacts/training-metrics.svg`](artifacts/training-metrics.svg).
+The expanded sanitized fine-tuning bundle is in [`artifacts/finetune/`](artifacts/finetune/), including trainer logs, checkpoint state metadata, and manifests.
 
 The complete logs, TensorBoard events, evaluation outputs, and checkpoints are
 preserved in encrypted AWS S3. Dataset rows, raw conversation exports, adapter
