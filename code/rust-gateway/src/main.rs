@@ -1,4 +1,5 @@
-use axum::{extract::State, http::{HeaderMap, StatusCode}, response::IntoResponse, routing::{get, post}, Json, Router};
+use axum::{body::Body, extract::State, http::{header, HeaderMap, StatusCode}, response::IntoResponse, routing::{get, post}, Json, Router};
+use futures_util::StreamExt;
 use serde_json::{json, Value};
 use std::{env, sync::Arc, time::Instant};
 use tokio::{fs::OpenOptions, io::AsyncWriteExt};
@@ -24,10 +25,14 @@ async fn chat(State(state): State<Arc<AppState>>, headers: HeaderMap, Json(paylo
     let result = state.client.post(format!("{}/v1/chat/completions", state.vllm_url)).json(&payload).send().await;
     match result {
         Ok(response) => {
-            let status = response.status();
-            let body = response.json::<Value>().await.unwrap_or_else(|_| json!({"error":"invalid vllm response"}));
-            emit(&state, json!({"event":"vllm_proxy","request_id":request_id,"message_count":count,"status_code":status.as_u16(),"latency_ms":started.elapsed().as_millis()})).await;
-            (status, Json(body)).into_response()
+            let status = StatusCode::from_u16(response.status().as_u16()).unwrap_or(StatusCode::BAD_GATEWAY);
+            let content_type = response.headers().get(header::CONTENT_TYPE).cloned();
+            emit(&state, json!({"event":"vllm_proxy","request_id":request_id,"message_count":count,"status_code":status.as_u16(),"stream":true,"latency_ms":started.elapsed().as_millis()})).await;
+            let stream = response.bytes_stream().map(|chunk| chunk.map_err(std::io::Error::other));
+            let mut builder = Body::from_stream(stream).into_response();
+            *builder.status_mut() = status;
+            if let Some(value) = content_type { builder.headers_mut().insert(header::CONTENT_TYPE, value); }
+            builder
         }
         Err(_) => {
             emit(&state, json!({"event":"vllm_proxy","request_id":request_id,"message_count":count,"status_code":502,"latency_ms":started.elapsed().as_millis()})).await;

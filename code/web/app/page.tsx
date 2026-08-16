@@ -56,9 +56,34 @@ export default function Page() {
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ message }),
       });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.text ?? data.error ?? "Inference failed");
-      setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: data.text ?? "No response returned.", metrics: data.metrics }]);
+      if (!response.ok || !response.body) throw new Error((await response.text()) || "Inference failed");
+      const assistantId = crypto.randomUUID();
+      setMessages((current) => [...current, { id: assistantId, role: "assistant", content: "" }]);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let content = "";
+      let metrics: Metrics | undefined;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+        for (const line of lines) {
+          if (!line.startsWith("data:")) continue;
+          const raw = line.slice(5).trim();
+          if (!raw || raw === "[DONE]") continue;
+          try {
+            const chunk = JSON.parse(raw);
+            if (chunk.aurorium_metrics) metrics = chunk.aurorium_metrics;
+            const delta = chunk.choices?.[0]?.delta?.content;
+            if (typeof delta === "string") content += delta;
+            setMessages((current) => current.map((item) => item.id === assistantId ? { ...item, content, metrics } : item));
+          } catch { /* ignore a partial SSE frame */ }
+        }
+      }
+      setMessages((current) => current.map((item) => item.id === assistantId ? { ...item, content: content || "No response returned.", metrics } : item));
       setNotice("Connected");
     } catch (error) {
       setMessages((current) => [...current, { id: crypto.randomUUID(), role: "assistant", content: error instanceof Error ? error.message : "Inference endpoint unavailable." }]);
