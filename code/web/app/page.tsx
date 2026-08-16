@@ -115,9 +115,10 @@ export default function Page() {
                 <div className="message-content">{message.content}</div>
                 {message.metrics && <div className="run-metrics" aria-label="Inference run metrics">
                   <span><b>{message.metrics.tokensPerSecond || "—"}</b> tok/s</span>
-                  <span><b>{message.metrics.responseMs}ms</b> response</span>
+                  <span title="Buffered time to first response; streaming TTFT is not enabled"><b>{message.metrics.responseMs}ms</b> TFT</span>
                   <span><b>{message.metrics.completionTokens}</b> output tok</span>
                   <span><b>{message.metrics.promptTokens}</b> input tok</span>
+                  <span><b>{message.metrics.totalTokens}</b> total tok</span>
                   <span className="adapter-badge">adapter · {message.metrics.adapter}</span>
                 </div>}
               </article>)}
