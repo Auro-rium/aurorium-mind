@@ -17,6 +17,7 @@ and credentials.
 - Final global step: 1,563
 - Final eval loss: 0.05661
 - Final eval token accuracy: 0.9771
+- Adapter SHA-256: `0fba57e246ed38cd6a7ea5b040553079ba9f691e8afb52a8834182efbe0cb464`
 
 ## Included
 
@@ -27,4 +28,7 @@ and credentials.
 - `logs/qlora-smoke.log`: smoke-test log
 
 The authoritative full artifacts remain in encrypted AWS S3. The adapter is
-served privately as the `aurorium` LoRA module on top of the base model.
+served internally as the `aurorium` LoRA module on top of the base model; the
+public API exposes FastAPI rather than the internal vLLM model route. The
+published adapter is available at
+https://huggingface.co/auro-rirum/aurorium-mind-qwen35-4b-qlora.

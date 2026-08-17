@@ -19,6 +19,19 @@ QLoRA writes checkpoints plus TensorBoard scalar metrics beneath its output
 directory, so training loss/evaluation state survives the instance lifecycle
 without storing examples.
 
+## Live serving limits
+
+- vLLM context: 8,192 tokens
+- Frontend output budget: up to 4,096 tokens, bounded by remaining context
+- GPU: one NVIDIA A10G on AWS `g5.2xlarge` in `us-east-2b`
+- Public frontend: https://aurorium-mind.vercel.app
+- Public adapter: https://huggingface.co/auro-rirum/aurorium-mind-qwen35-4b-qlora
+- Public backend health: https://3.134.167.80.sslip.io/health
+
+The internal vLLM route loads `Qwen/Qwen3.5-4B` plus the `aurorium` adapter.
+The base model and vLLM model-list route are not exposed through the public
+HTTPS API.
+
 ## Corpus build
 
 The source files remain local and are never committed. Run on the secure
