@@ -53,7 +53,7 @@ The observed idle GPU sample was **0% utilization, 20,019 / 23,028 MiB VRAM,
 
 - Public adapter: https://huggingface.co/auro-rirum/aurorium-mind-qwen35-4b-qlora
 - Public synthetic dataset: https://huggingface.co/datasets/auro-rirum/aurorium-mind-sft-100k
-- Published files: `adapter_model.safetensors`, `adapter_config.json`, `training_manifest.json`, `README.md`
+- Published files: adapter files, manifest, README, and the synthetic dataset's compressed and viewer-compatible JSONL splits
 - Excluded: raw data, conversation exports, checkpoints, base-model weights, and secrets.
 
 ## AWS security and storage

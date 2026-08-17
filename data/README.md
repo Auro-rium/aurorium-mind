@@ -8,6 +8,8 @@ private ChatGPT, Codex, website, or GitHub conversations.
 
 - `train-100k.jsonl.gz`: 100,000 training examples
 - `eval-2k-disjoint.jsonl.gz`: 2,000 disjoint evaluation examples
+- `train-100k.jsonl` and `eval-2k-disjoint.jsonl`: uncompressed copies for
+  direct Hub/Dataset Viewer inspection
 - `train-100k-manifest.json`: counts, provenance, and SHA-256 checksums
 
 Each row contains `messages` plus a `provenance` object. Every provenance record
