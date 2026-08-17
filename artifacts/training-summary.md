@@ -21,8 +21,9 @@
 - Frontend: https://aurorium-mind.vercel.app
 - Backend host: `https://3.134.167.80.sslip.io`
 - Runtime: vLLM + Rust gateway + FastAPI + Caddy
-- Model repository: pending secure Hugging Face write credential; no token is
-  stored in this repository.
+- Public adapter: https://huggingface.co/auro-rirum/aurorium-mind-qwen35-4b-qlora
+- Current serving context: 8,192 tokens; frontend output budget: 4,096 tokens
+- Current runtime proof: see [`live-status.md`](live-status.md)
 
 The run's complete logs, checkpoints, evaluation outputs, and TensorBoard
 events are preserved in the encrypted AWS S3 artifact bucket. This repository

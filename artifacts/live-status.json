@@ -1,0 +1,54 @@
+{
+  "snapshot_date": "2026-08-17",
+  "training": {
+    "base_model": "Qwen/Qwen3.5-4B",
+    "method": "QLoRA/SFT",
+    "train_examples": 100000,
+    "eval_examples": 2000,
+    "epochs": 1,
+    "batch_size": 64,
+    "gradient_accumulation": 1,
+    "train_max_sequence_tokens": 512,
+    "final_train_loss": 0.2158,
+    "final_eval_loss": 0.05661,
+    "final_eval_token_accuracy": 0.9771,
+    "runtime_hours_approx": 13.9667,
+    "adapter_sha256": "0fba57e246ed38cd6a7ea5b040553079ba9f691e8afb52a8834182efbe0cb464"
+  },
+  "serving": {
+    "instance_type": "g5.2xlarge",
+    "availability_zone": "us-east-2b",
+    "gpu": "NVIDIA A10G",
+    "context_tokens": 8192,
+    "max_output_tokens": 4096,
+    "model_ids_internal": ["qwen35-base", "aurorium"],
+    "containers": ["vllm", "caddy", "fastapi", "rust-gateway"],
+    "gpu_sample_idle": {
+      "utilization_pct": 0,
+      "memory_used_mib": 20019,
+      "memory_total_mib": 23028,
+      "temperature_c": 38,
+      "power_w": 61.55
+    }
+  },
+  "deployment": {
+    "frontend": "https://aurorium-mind.vercel.app",
+    "backend_health": "https://3.134.167.80.sslip.io/health",
+    "vercel_deployment": "aurorium-mind-jav2kkvcl-auroriumnexus-6067s-projects.vercel.app",
+    "vercel_status": "READY",
+    "git_commit": "0dd819e"
+  },
+  "publication": {
+    "huggingface_adapter": "https://huggingface.co/auro-rirum/aurorium-mind-qwen35-4b-qlora",
+    "files": ["adapter_model.safetensors", "adapter_config.json", "training_manifest.json", "README.md"],
+    "contains_raw_data": false,
+    "contains_checkpoints": false,
+    "contains_base_weights": false,
+    "contains_secrets": false
+  },
+  "security": {
+    "root_volume": "encrypted 300 GiB gp3",
+    "inbound_ports": [443],
+    "management": "SSM"
+  }
+}
