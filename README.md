@@ -6,6 +6,7 @@ vLLM, a Rust gateway, FastAPI, and Caddy, with a Next.js/Vercel workspace UI.
 ## Live links
 
 - Frontend: https://aurorium-mind.vercel.app
+- Explainer: https://aurorium-mind.vercel.app/explainer.html
 - GitHub: https://github.com/Auro-rium/aurorium-mind
 - Intended API host: https://3.134.167.80.sslip.io
 

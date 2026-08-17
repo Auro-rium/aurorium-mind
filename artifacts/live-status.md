@@ -43,6 +43,7 @@ The observed idle GPU sample was **0% utilization, 20,019 / 23,028 MiB VRAM,
 ## Frontend and deployment
 
 - Frontend: https://aurorium-mind.vercel.app
+- Explainer: https://aurorium-mind.vercel.app/explainer.html
 - Verified production deployment: `aurorium-mind-jav2kkvcl-auroriumnexus-6067s-projects.vercel.app`
 - Deployment status: Ready / Production
 - Git commit: `0dd819e` (`expand context budget and refresh chat interface`)
