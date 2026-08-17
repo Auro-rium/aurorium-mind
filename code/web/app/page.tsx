@@ -114,6 +114,7 @@ export default function Page() {
           <div className="system-card">
             <div><span className="signal" /><span>{notice}</span></div>
             <small>Qwen/Qwen3.5-4B · aurorium QLoRA</small>
+            <small className="context-readout">8k context · 4k max output</small>
           </div>
         </section>
 
@@ -130,7 +131,7 @@ export default function Page() {
         <header className="topbar">
           <div className="mobile-brand"><Mark /><span>Aurorium Mind</span></div>
           <div className="session-title"><span className="muted">Session</span><strong>{messages.length ? "Reasoning in progress" : "New reasoning path"}</strong></div>
-          <div className="top-status"><span className="signal" />{notice}</div>
+          <div className="top-actions"><span className="context-badge">8k context · 4k max</span><div className="top-status"><span className="signal" />{notice}</div></div>
         </header>
 
         <div className={`conversation ${messages.length ? "has-messages" : ""}`}>
@@ -171,7 +172,7 @@ export default function Page() {
         <div className="composer-wrap">
           <form className="composer" onSubmit={send}>
             <textarea ref={textarea} value={input} onChange={(event) => setInput(event.target.value)} rows={1} placeholder="Ask for a deeper look…" aria-label="Message Aurorium Mind" />
-            <div className="composer-footer"><span><Spark /> Reasoning mode</span><button type="submit" disabled={busy || !input.trim()} aria-label="Send message"><ArrowUp /></button></div>
+            <div className="composer-footer"><div className="composer-tools"><span><Spark /> Reasoning mode</span><span className="composer-chip">Complete answers</span><span className="composer-chip">No hidden traces</span></div><button type="submit" disabled={busy || !input.trim()} aria-label="Send message"><ArrowUp /></button></div>
           </form>
           <p className="composer-note">Enter to send · Shift + Enter for a new line</p>
         </div>
