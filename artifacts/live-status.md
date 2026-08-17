@@ -52,6 +52,7 @@ The observed idle GPU sample was **0% utilization, 20,019 / 23,028 MiB VRAM,
 ## Model publication
 
 - Public adapter: https://huggingface.co/auro-rirum/aurorium-mind-qwen35-4b-qlora
+- Public synthetic dataset: https://huggingface.co/datasets/auro-rirum/aurorium-mind-sft-100k
 - Published files: `adapter_model.safetensors`, `adapter_config.json`, `training_manifest.json`, `README.md`
 - Excluded: raw data, conversation exports, checkpoints, base-model weights, and secrets.
 

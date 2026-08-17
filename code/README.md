@@ -26,6 +26,7 @@ without storing examples.
 - GPU: one NVIDIA A10G on AWS `g5.2xlarge` in `us-east-2b`
 - Public frontend: https://aurorium-mind.vercel.app
 - Public adapter: https://huggingface.co/auro-rirum/aurorium-mind-qwen35-4b-qlora
+- Public synthetic dataset: https://huggingface.co/datasets/auro-rirum/aurorium-mind-sft-100k
 - Public backend health: https://3.134.167.80.sslip.io/health
 
 The internal vLLM route loads `Qwen/Qwen3.5-4B` plus the `aurorium` adapter.

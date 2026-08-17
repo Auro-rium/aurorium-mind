@@ -28,3 +28,6 @@ It contains only the adapter files, training manifest, and README; no dataset
 rows, checkpoints, or base-model weights are published. The publisher remains
 in [`code/deploy/push_private_adapter.py`](code/deploy/push_private_adapter.py)
 and accepts credentials only through `HF_TOKEN` from a secure store.
+
+The procedural synthetic training and disjoint evaluation data are published
+separately at [`auro-rirum/aurorium-mind-sft-100k`](https://huggingface.co/datasets/auro-rirum/aurorium-mind-sft-100k), with provenance and checksums. No private conversation exports are included.

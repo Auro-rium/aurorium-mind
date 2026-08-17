@@ -40,6 +40,8 @@
   },
   "publication": {
     "huggingface_adapter": "https://huggingface.co/auro-rirum/aurorium-mind-qwen35-4b-qlora",
+    "huggingface_dataset": "https://huggingface.co/datasets/auro-rirum/aurorium-mind-sft-100k",
+    "dataset_files": ["train-100k.jsonl.gz", "eval-2k-disjoint.jsonl.gz", "train-100k-manifest.json", "README.md"],
     "files": ["adapter_model.safetensors", "adapter_config.json", "training_manifest.json", "README.md"],
     "contains_raw_data": false,
     "contains_checkpoints": false,
