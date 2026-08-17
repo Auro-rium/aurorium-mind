@@ -52,6 +52,13 @@ tags:
 Private LoRA adapter for `Qwen/Qwen3.5-4B`. The training corpus is procedural
 synthetic SFT data; it does not claim to contain private conversation exports.
 Load it as adapter `aurorium` with a compatible Qwen 3.5 base model.
+
+## Philosophy
+
+Aurorium Mind is built around first principles, inversion, second-order effects,
+systems thinking, game theory, and pragmatic transhumanism. These are guiding
+reasoning lenses, not a claim of perfect factuality or private-conversation
+reproduction.
 """,
         encoding="utf-8",
     )

@@ -17,6 +17,13 @@ is labelled `procedural_synthetic` and `human_authored: false`. The source
 shards cover first principles, game theory, pragmatic systems, second-order
 effects/inversion, speculative transhumanism, and systems thinking.
 
+## Philosophy
+
+The corpus is organized around first-principles reasoning, inversion, second-
+order effects, systems thinking, game theory, and pragmatic transhumanism. These
+are reasoning lenses and design values—not claims that every generated answer is
+true or that synthetic rows reproduce a person's private voice.
+
 The split boundaries and checksums are preserved in the manifest. The dataset
 contains no credentials, raw private conversation exports, model checkpoints,
 or base-model weights.
